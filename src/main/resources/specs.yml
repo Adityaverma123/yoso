@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: Yoso api specifications
+  description: Open api specification for Yoso
+  contact:
+    email: av9567@gmail.com
+  version: 1.0.0
+paths:
+  /looks/v1:
+    post:
+      tags:
+        - Look
+      summary: Create a new look
+      description: Create a new look
+      operationId: createLook
+      requestBody:
+        description: Details req to create new look
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookRequest'
+        required: true
+      responses:
+        '401':
+          description: Successful operation
+    get:
+      tags:
+        - Look
+      summary: Get all looks
+      description: get all looks
+      operationId: getAllLooks
+      responses:
+        '200':
+          description: Returns all looks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookDetails'
+
+  /looks/v1/{id}:
+    put:
+      tags:
+        - Look
+      summary: Updates the look
+      description: Updates the look
+      operationId: updateLook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Details req to update look
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LookRequest'
+        required: true
+      responses:
+        '200':
+          description: updates look by id
+          content:
+            application/json:
+              schema:
+                type: string
+    get:
+      tags:
+        - Look
+      summary: Get look by id
+      description: get look by id
+      operationId: getLook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns look by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookDetails'
+
+  /looks/v1/user:
+    get:
+      tags:
+        - Look
+      summary: Get eligible looks for user
+      description: get eligible looks
+      operationId: getAllEligibleLooks
+      responses:
+        '200':
+          description: Returns all user looks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserLook'
+components:
+  schemas:
+    LookRequest:
+      type: object
+      required:
+        - name
+        - description
+        - discountedPrice
+        - isActive
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        discountedPrice:
+          type: integer
+        isActive:
+          type: boolean
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookProduct'
+    UserLook:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        totalPrice:
+          type: integer
+        discountedPrice:
+          type: integer
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDetails'
+
+    ProductDetails:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        availableUnits:
+          type: integer
+        priceInInr:
+          type: integer
+
+    LookProduct:
+      type: object
+      properties:
+        productId:
+          type: string
+        minQuantity:
+          type: integer
+
+    LookDetails:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        discountedPrice:
+          type: integer
+        availableUnits:
+          type: integer
+        isActive:
+          type: boolean
+        products:
+          type: array
+          items:
+           $ref: '#/components/schemas/LookProductDetails'
+
+    LookProductDetails:
+      type: object
+      properties:
+        productId:
+          type: string
+        minQuantity:
+          type: integer
+        availableUnits:
+          type: integer
